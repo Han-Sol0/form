@@ -1,5 +1,5 @@
 import "./App.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const initialState = {
     email: "",
@@ -29,6 +29,18 @@ function App() {
     };
     const { email, password, repeatPassword } = getState();
 
+    const buttonRef = useRef();
+    //  const isValid = Object.keys(loginError).length === 0;
+    useEffect(() => {
+        if (
+            email !== "" &&
+            password !== "" &&
+            repeatPassword !== "" &&
+            loginError === null
+        ) {
+            buttonRef.current.focus();
+        }
+    }, [loginError]);
     return (
         <div className="App">
             <form onSubmit={onSubmit}>
@@ -93,7 +105,11 @@ function App() {
                         setLoginError(error);
                     }}
                 />
-                <button type="submit" disabled={loginError !== null}>
+                <button
+                    type="submit"
+                    disabled={loginError !== null}
+                    ref={buttonRef}
+                >
                     Зарегистрироваться
                 </button>
             </form>
